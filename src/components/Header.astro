@@ -1,0 +1,15 @@
+---
+const { current = "works" } = Astro.props;
+---
+<header class="site-header">
+  <div class="site-title-block">
+    <div class="site-title">
+      <a href="/" style="color:inherit;text-decoration:none;">WENTAO LYU</a>
+    </div>
+    <div class="site-subtitle">Architecture · Research</div>
+  </div>
+  <nav class="site-nav">
+    <a href="/works" class={current === "works" ? "active" : ""}>Works</a>
+    <a href="/about" class={current === "about" ? "active" : ""}>About</a>
+  </nav>
+</header>

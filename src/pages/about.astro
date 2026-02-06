@@ -1,0 +1,298 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+---
+
+<style>
+  /* --- 全局布局覆盖 --- */
+  .page-layout-override {
+    /* 1. 页面底色：深灰 (Sidebar 和背景) */
+  
+    color: #e0e0e0 !important;
+    
+    /* 布局设置 */
+    max-width: 1200px !important;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 2rem;
+    min-height: 100vh;
+  }
+
+  /* 确保标题继承默认字体 */
+  .page-layout-override h1, 
+  .page-layout-override h2, 
+  .page-layout-override h3 {
+    font-family: inherit !important;
+  }
+
+  .about-container {
+    display: grid;
+    /* 左侧 240px，右侧自适应 */
+    grid-template-columns: 240px 1fr;
+    gap: 4rem;
+    padding-top: 3rem;
+    align-items: start;
+  }
+
+  /* 左侧边栏 */
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: sticky;
+    top: 3rem;
+  }
+
+  /* 头像样式 */
+  .portrait {
+    width: 100%; 
+    aspect-ratio: 1 / 1; 
+    object-fit: cover;
+    background-color: #222; 
+    margin-bottom: 0.5rem;
+    border-radius: 0; /* 直角 */
+  }
+
+  /* 左侧信息列表 */
+  .info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* 左侧小标题：匹配 .notes-kicker 风格 */
+  .info-item dt {
+    font-weight: 400; /* 保持轻盈 */
+    text-transform: uppercase;
+    
+    /* 【匹配】使用了截图中的 0.18em 间距 */
+    letter-spacing: 0.18em; 
+    
+    /* 字体大小微调：18px在侧边栏可能过大，这里设为 12px 保持精致，但间距拉开 */
+    font-size: 12px; 
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.5rem;
+  }
+
+  /* 左侧内容：匹配 Body 风格 */
+  .info-item dd {
+    margin: 0;
+    font-size: 14px; /* 侧边栏字稍小一点，保持层级 */
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* --- 右侧主要内容 --- */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+    
+    /* 【关键修改】右侧背景改为纯黑 */
+    background-color: #000000; 
+    padding: 3rem;             
+    
+    border-radius: 0;        
+    border: 1px solid rgba(255, 255, 255, 0.05); 
+  }
+
+  /* Bio 段落排版 - 【严格匹配 .notes-body】 */
+  .bio-text p {
+    /* 【匹配】字体大小 16px */
+    font-size: 16px; 
+    
+    /* 【匹配】行高 1.8 */
+    line-height: 1.8; 
+    
+    color: rgba(255, 255, 255, 0.85); /* 模拟 text-muted */
+    margin-bottom: 1.5rem;
+    margin-top: 0; 
+    max-width: 100%; 
+  }
+  
+  .bio-text strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* 标题样式 - 【严格匹配 .notes-title】 */
+  .section-title {
+    /* 【匹配】字体大小 24px */
+    font-size: 24px; 
+    
+    /* 【匹配】字重 400 */
+    font-weight: 400; 
+    
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    padding-bottom: 0.8rem;
+    color: #fff;
+    margin-top: 0rem; 
+  }
+
+  /* 经历列表内部文字 - 同样匹配 Body */
+  .experience-block {
+    margin-bottom: 2.5rem;
+  }
+
+  .exp-header {
+    margin-bottom: 0.8rem;
+  }
+  
+  /* 职位小字 */
+  .exp-role {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 0.3rem;
+    letter-spacing: 0.02em;
+  }
+
+  .exp-list {
+    padding-left: 1.2rem;
+    
+    /* 【匹配】列表也使用 16px 和 1.8 行高 */
+    font-size: 16px;
+    line-height: 1.8;
+    
+    color: rgba(255, 255, 255, 0.85);
+  }
+  
+  .exp-list li {
+    margin-bottom: 0.6rem;
+  }
+
+  /* 链接样式 */
+  a.download-link {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    font-weight: bold;
+    transition: opacity 0.2s;
+  }
+  a.download-link:hover {
+    opacity: 0.7;
+  }
+
+  /* 响应式设计 */
+  @media (max-width: 900px) {
+    .about-container {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+    
+    .sidebar {
+      position: static;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+
+    .portrait {
+      max-width: 180px; 
+    }
+    
+    .page-layout-override {
+      padding: 0 1rem;
+    }
+
+    .main-content {
+      padding: 1.5rem; 
+    }
+  }
+</style>
+
+<BaseLayout title="About — WENTAO LYU" description="About and CV of WENTAO LYU.">
+  <Header current="about" />
+  
+  <div class="page-layout-override">
+    <div class="about-container">
+      
+      <aside class="sidebar">
+        <img src="/public/images/cover/potrait.jpg" alt="Wentao Lyu" class="portrait" />
+
+        <div class="sidebar-info-wrapper">
+            <div class="header-name" style="margin-bottom: 2rem;">
+            <h1 style="margin: 0; font-size: 32px; font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; color: #fff;">WENTAO<br>LYU</h1>
+            </div>
+
+            <dl class="info-list">
+            <div class="info-item">
+                <dt>Discipline</dt>
+                <dd>Architecture / Urban Design / Computation</dd>
+            </div>
+            <div class="info-item">
+                <dt>Education</dt>
+                <dd>MAAD — UC Berkeley (2026)</dd>
+                <dd>B.Arch — Shenzhen Univ. (2024)</dd>
+            </div>
+            <div class="info-item">
+                <dt>Focus</dt>
+                <dd>High-rise Systems, Parametric Design, Fabrication, Urban Regeneration</dd>
+            </div>
+            <div class="info-item">
+                <dt>CV</dt>
+                <dd>
+                <a href="/path/to/your/cv.pdf" target="_blank" class="download-link">
+                    Download Full Resume (PDF) ↗
+                </a>
+                </dd>
+            </div>
+            </dl>
+        </div>
+      </aside>
+
+      <div class="main-content">
+        
+        <div class="bio-text">
+          <p>
+            I am an architectural designer and currently a <strong>Master of Advanced Architectural Design (MAAD) candidate at UC Berkeley</strong>. My design philosophy centers on bridging the gap between advanced digital computation and real-world constructability, exploring how parametric workflows can optimize high-density urban living.
+          </p>
+          <p>
+            Prior to my graduate studies, I practiced as a <strong>Junior Architectural Designer at Pelli Clarke & Partners (PC&P)</strong> for 1.5 years. This professional tenure was pivotal in shaping my technical expertise. I transitioned from a part-time role to a core team member, contributing to landmark international projects including <strong>The Canal (Dubai)</strong>, <strong>The Al Marjan Island Masterplan</strong> and <strong>Fairmont Hotel & Apartment</strong>.
+          </p>
+          <p>
+            Beyond technical precision, I possess strong capabilities in <strong>architectural visualization</strong>, utilizing <strong>generative AI tools</strong> to enhance production efficiency and elevate visual quality. My work is defined by a rigorous control of geometry and data, specializing in the <strong>Rhino-to-Revit workflow</strong> to ensure that ambitious design concepts are translated into feasible technical solutions. I am currently seeking an Architectural Designer position starting <strong>May 2026</strong>.
+          </p>
+        </div>
+
+        <div>
+          <h2 class="section-title">Selected Experience</h2>
+          
+          <div class="experience-block">
+            <div class="exp-header">
+              <h3 style="margin: 0; font-size: 20px; font-weight: 400; color: #fff;">Pelli Clarke & Partners (PC&P)</h3>
+              <div class="exp-role">Architectural Intern (Long-term) | Shenzhen | Mar 2024 – Jul 2025</div>
+            </div>
+            <ul class="exp-list">
+              <li><strong>Role Transition:</strong> Transitioned from part-time to full-time role; served as a core team member on complex international projects.</li>
+              <li><strong>Technical Design:</strong> Spearheaded the development of complex <strong>curtain wall systems</strong> for Fairmont Hotel & Apartment of Al Marjan Island, producing detailed wall sections for constructability.</li>
+              <li><strong>Advanced Workflow:</strong> Implemented a seamless <strong>Rhino-to-Revit workflow</strong> to manage complex massing data for large-scale masterplans.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="section-title">Honors & Awards</h2>
+          <ul class="exp-list" style="list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 0.8rem;">
+              <strong>Merit Prize</strong>, The 58th Central Glass International Architectural Design Competition
+            </li>
+            <li style="margin-bottom: 0.8rem;">
+              <strong>Top 100</strong>, Southeast University Architectural Newcomer Competition <br>
+              <span style="color: rgba(255,255,255,0.5); font-size: 14px;">(Recognized as top emerging talent in China)</span>
+            </li>
+            <li>
+              <strong>Third Prize</strong>, The 13th Yuanye Cup International Competition (Group Leader)
+            </li>
+          </ul>
+        </div>
+
+        <div style="margin-top: 1rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); font-size: 14px;">
+          <span>Last updated: Feb 2026</span>
+          <span style="margin-left: 1.5rem;">Contact: <a href="mailto:993323708lwt@gmail.com" style="color: inherit; text-decoration: underline;">993323708lwt@gmail.com</a></span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</BaseLayout>

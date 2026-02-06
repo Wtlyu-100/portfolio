@@ -1,0 +1,112 @@
+---
+// 这里定义您的轮播图片路径
+const heroImages = [
+"public/images/cover/IMG_6797.png",
+  "public/images/dewlling/dw.jpg",   
+  "public/images/seek/sm.jpg"    
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — WENTAO LYU</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio — WENTAO LYU</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      /* 为了确保万无一失，我们在这里加一个针对 body 的重置样式 
+         防止浏览器默认边距影响全屏效果
+      */
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* 防止出现滚动条 */
+      }
+    </style>
+  </head>
+  <body class="fade-in">
+    <main class="landing-frame">
+      <div class="landing">
+        
+        <div class="landing-bg" id="hero-carousel">
+          
+          <div class="carousel-layer">
+            {heroImages.map((imgSrc, index) => (
+              <img 
+                class={`carousel-slide ${index === 0 ? 'active' : ''}`}
+                src={imgSrc} 
+                alt="Hero background"
+                loading={index === 0 ? "eager" : "lazy"} 
+              />
+            ))}
+          </div>
+
+          <div class="landing-overlay"></div>
+
+          <div class="landing-inner">
+            <div class="landing-content">
+              <div>WENTAO LYU</div>
+              <div class="landing-enter">
+                <a href="/works">Enter</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-dots">
+            {heroImages.map((_, index) => (
+              <span class={`dot ${index === 0 ? 'active' : ''}`} data-index={index}></span>
+            ))}
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const carousel = document.getElementById('hero-carousel');
+      if (carousel) {
+        const slides = carousel.querySelectorAll('.carousel-slide');
+        const dots = carousel.querySelectorAll('.dot');
+        let currentIndex = 0;
+        const intervalTime = 6000; // 3秒切换
+
+        const showSlide = (index) => {
+          slides[currentIndex].classList.remove('active');
+          dots[currentIndex].classList.remove('active');
+          currentIndex = index;
+          slides[currentIndex].classList.add('active');
+          dots[currentIndex].classList.add('active');
+        };
+
+        const nextSlide = () => {
+          const newIndex = (currentIndex + 1) % slides.length;
+          showSlide(newIndex);
+        };
+
+        let slideInterval = setInterval(nextSlide, intervalTime);
+
+        dots.forEach(dot => {
+          dot.addEventListener('click', () => {
+            clearInterval(slideInterval);
+            const index = parseInt(dot.getAttribute('data-index'));
+            showSlide(index);
+            slideInterval = setInterval(nextSlide, intervalTime);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

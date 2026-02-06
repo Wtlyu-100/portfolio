@@ -1,0 +1,163 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+
+const works = [
+  {
+    slug: "intergenerational-incubator",
+    title: "Intergenerational Incubator",
+    type: "High-rise / Social Housing",
+    year: "2025",
+    area: "85,000 sqm",
+    location: "Hong Kong",
+    role: "Studio / Thesis",
+    tags: ["Elderly", "Youth", "Vertical Ground"],
+    imagePath: "/images/incubator/hero.jpg",
+    // 12列网格系统：
+    // colSpan: 12 = 100% 宽度
+    // colSpan: 6  = 50% 宽度
+    // colSpan: 4  = 33% 宽度
+    // colSpan: 3  = 25% 宽度
+    colSpan: 4, 
+    rowSpan: 2,
+  },
+
+  {
+    slug: "dwelling-in-the-wood",
+    title: "Dwelling in the Wood",
+    type: "Rural Renovation",
+    year: "2024",
+    area: "250 sqm",
+    location: "Chongqing, China",
+    role: "Team Leader",
+    tags: ["Renovation", "Timber", "Housing"],
+    imagePath: "/images/dewlling/dw.jpg",
+    colSpan: 5, 
+    rowSpan: 1,
+  },
+  {
+    slug: "seek-and-meet",
+    title: "Seek & Meet",
+    type: "Landscape Installation",
+    year: "2023",
+    area: "Built Project",
+    location: "China",
+    role: "Design & Construction",
+    tags: ["Landscape", "Installation", "Built"],
+    imagePath: "public/images/seek/M&S_03(1).png",
+    colSpan: 3, 
+    rowSpan: 1,
+  },
+  {
+    slug: "void-and-solid-venice",
+    title: "The Game of Void and Solid",
+    type: "Exhibition Installation",
+    year: "2023",
+    area: "240 sqm",
+    location: "Venice, Italy",
+    role: "Team Leader",
+    tags: ["Exhibition", "Pavilion", "Pyramid"],
+    imagePath: "/images/cover/Py.jpg",
+    colSpan: 6, 
+    rowSpan: 1,
+  },
+   {
+    slug: "timber-fabrication",
+    title: "Folded Dance",
+    type: "Material Research / Design",
+    year: "2025",
+    area: "Prototypes",
+    location: "California",
+    role: "Studio / Lab",
+    tags: ["Timber", "Structure"],
+    imagePath: "public/images/folded/IMG_6838.png",
+    colSpan: 8, 
+    rowSpan: 2,   
+  },
+  {
+    slug: "canal-city-living",
+    title: "Canal-City Living",
+    type: "Hydrological-Oriented Urban Design",
+    year: "2022", // 若年份不准请修改
+    area: "Urban Scale",
+    location: "China", 
+    role: "Urban Design",
+    tags: ["Urbanism", "Hydrology", "Infrastructure"],
+    // ⚠️ 请确保您的 public/images/ 文件夹下有这张图片，或者修改路径
+    imagePath: "public/images/canel/cover.jpg", 
+    colSpan: 6, // 设置为半宽大图，强调城市尺度
+    rowSpan: 1,
+  },
+];
+
+// 控制顺序和 Note 卡片的位置
+const grid = [
+  { kind: "work", slug: "timber-fabrication" },
+    // Note 卡片也添加 colSpan/rowSpan 以保持统一
+  {
+    kind: "note",
+    // 关键调整：因为文字变多了，建议增加 colSpan 或 rowSpan
+    colSpan: 4,  // 宽度占 4/12 (约 33%)，原来是 3
+    rowSpan: 1,  // 高度占 2 行，以容纳长文本
+    
+    kicker: "2019 ~ 2026", 
+    title: "Passion & Patience", 
+    body: "During my undergraduate studies in architecture, I learned that passion and patience are the foundations of my design approach. Passion drives me to explore bold ideas, engage deeply with each project, and continuously pursue excellence. Patience allows me to embrace the iterative nature of design, refining my work through research, revision, and attention to detail. Together, they shape my understanding that meaningful architecture is created not only through vision, but also through careful and disciplined development.",
+  },
+  
+  { kind: "work", slug: "intergenerational-incubator" },
+  
+   { kind: "work", slug: "seek-and-meet" },
+  { kind: "work", slug: "dwelling-in-the-wood" },
+  { kind: "work", slug: "void-and-solid-venice" },
+  { kind: "work", slug: "canal-city-living" },
+];
+
+const bySlug = Object.fromEntries(works.map((w) => [w.slug, w]));
+---
+
+<BaseLayout title="Works — WENTAO LYU" description="Selected works by WENTAO LYU.">
+  <Header current="works" />
+
+  <section class="tri-grid">
+    {grid.map((item) => {
+      // 1. 处理 Note 卡片
+      if (item.kind === "note") {
+        return (
+          <article 
+            class="grid-item notes-item"
+            style={`grid-column: span ${item.colSpan || 3}; grid-row: span ${item.rowSpan || 1};`}
+          >
+            <div class="notes-inner">
+              <div class="notes-kicker">{item.kicker}</div>
+              <div class="notes-title">{item.title}</div>
+              <div class="notes-body">{item.body}</div>
+            </div>
+          </article>
+        );
+      }
+
+      // 2. 处理 Work 卡片
+      const work = bySlug[item.slug];
+      if (!work) return null;
+
+      return (
+        <article 
+          class="grid-item"
+          style={`grid-column: span ${work.colSpan || 3}; grid-row: span ${work.rowSpan || 1};`}
+        >
+          <a class="work-link" href={`/projects/${work.slug}`}>
+            <img class="work-thumb" src={work.imagePath} alt={work.title} loading="lazy" />
+            <div class="work-overlay">
+              <div class="work-title">{work.title}</div>
+              <div class="work-sub">
+                {work.type} · {work.year}{work.area && ` · ${work.area}`} · {work.location}
+              </div>
+              <div class="work-tags">{work.tags.join(" · ")}</div>
+            </div>
+          </a>
+        </article>
+      );
+    })}
+  </section>
+</BaseLayout>
