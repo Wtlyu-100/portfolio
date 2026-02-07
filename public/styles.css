@@ -7,13 +7,6 @@
   --text-muted: #9a9a9a;/* 次要文字：灰白 */
   --accent: #ffffff;    /* 强调色 */
 }
-:root {
-  --font-serif: "Playfair Display", serif;
-}
-
-html, body {
-  font-family: var(--font-serif);
-}
 
 
 *, *::before, *::after {
