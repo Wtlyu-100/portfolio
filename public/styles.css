@@ -239,6 +239,7 @@ h1, h2 {                           /* 所有的标题 */
   align-items: baseline;
   justify-content: space-between;
   gap: 24px;
+  scale: 0.85;
 }
 
 .site-title-block {
